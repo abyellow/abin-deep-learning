@@ -8,7 +8,7 @@ class dnn():
 	def __init__(self, X_train, Y_train, step_size = 0.001, reg = 0.01, h_size = [20,10], niter = 10000):
 
 		self.X = X_train
-		self.Y0 = Y_train
+		#self.Y = Y_train
 
 		self.step_size = step_size
 		self.reg = reg
@@ -18,7 +18,7 @@ class dnn():
 
 		self.ndata = np.shape(self.X)[0]
 		self.ndim = np.shape(self.X)[1]
-		self.nclass = len(np.unique(self.Y0))
+		self.nclass = len(np.unique(Y_train))
 
 		self.Y = np.zeros((self.ndata,self.nclass))
 		for i in range(self.ndata):
@@ -67,11 +67,11 @@ class dnn():
 			for j in range(h_deep):
 				fstate[j+1] = np.maximum(0, np.dot(fstate[j], ham[j]) + const[j])
 
-			#calculate loss################:
+			#calculate loss
 			scores = (fstate[h_deep])
 			exp_scores = np.exp(scores)
 			probs = exp_scores / np.sum(exp_scores,axis=1,keepdims=True)# (np.sum(exp_scores, axis = 1).reshape(self.ndata,1)+np.ones(self.nclass))
-			corect_logprobs = -np.log(probs[range(self.ndata),self.Y0])
+			corect_logprobs = -np.log(np.sum(probs*self.Y,axis=1))#[range(self.ndata),self.Y0])
 			data_loss = np.sum(corect_logprobs)/self.ndata
 
 			reg_loss = 0
@@ -83,7 +83,7 @@ class dnn():
 				print 'iteration: %d, loss: %f' %(i, loss_new)
 			loss = loss_new
 
-			#the other option--dscores:
+			#the other option for b_ini--dscores:
 			bstate[h_deep] = probs-self.Y
 			
 			for k in range(h_deep-1,-1,-1):
