@@ -5,7 +5,7 @@ import numpy as np
 
 class dnn():
 
-	def __init__(self, X_train, Y_train, step_size = 0.001, reg = 0.01, h_size = [20,10], niter = 10000):
+	def __init__(self, X_train, Y_train, step_size = 0.01, reg = 0.01, h_size = [20,10], niter = 10000):
 
 		self.X = X_train
 		self.Y = Y_train
@@ -75,6 +75,7 @@ class dnn():
 			probs = exp_scores / np.sum(exp_scores,axis=1,keepdims=True)# (np.sum(exp_scores, axis = 1).reshape(self.ndata,1)+np.ones(self.nclass))
 			corect_logprobs = -np.log(np.sum(probs*self.Y,axis=1))
 			data_loss = np.sum(corect_logprobs)/self.ndata
+
 			reg_loss = 0
 			for q in range(h_deep):
 				reg_loss -= .5 * self.reg * np.sum((ham[q]*ham[q])) #+ .5 *self.reg*np.sum((wt2*wt2))
@@ -130,7 +131,7 @@ class dnn():
 		scores = fstate[h_deep]
 		exp_scores = np.exp(scores)
 		probs = exp_scores / np.sum(exp_scores, axis = 1, keepdims = True)
-		Y_pred = probs.argmax(axis = 1)
+		Y_pred = scores.argmax(axis=1)#probs.argmax(axis = 1)
 
 		return Y_pred
 
