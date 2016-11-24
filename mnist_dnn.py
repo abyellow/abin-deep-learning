@@ -133,8 +133,8 @@ y_train, y_test = y[:parti], y[parti:]
 
 from dnn import dnn
 # accu1: use train as train, test as tet
-iter_times = 1000
-dnn1 = dnn(X_train, y_train, h_size = [20,10], niter = iter_times)
+iter_times = 10000
+dnn1 = dnn(X_train, y_train, h_size = [10], niter = iter_times)
 import time as ti
 st = ti.time()
 dnn1.model()
@@ -148,7 +148,7 @@ print acc1
 # In[21]:
 
 # accu2: use train as test, test as train
-nntl = neural_net_two_layer(X_test, y_test, niter = 10000, h_size = 10, reg = 0.001)
+dnn2 = dnn(X_test, y_test, niter = iter_times, h_size = [20,10])
 import time as ti
 st = ti.time()
 nntl.model()
