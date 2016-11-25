@@ -5,7 +5,7 @@ import numpy as np
 
 class dnn():
 
-	def __init__(self, X_train, Y_train, step_size = 0.001, reg = 0.01, h_size = [20,10], niter = 10000):
+	def __init__(self, X_train, Y_train, step_size = 0.0001, reg = 0.001, h_size = [20,10], niter = 10000):
 
 		self.X = X_train
 		#self.Y = Y_train
@@ -14,6 +14,7 @@ class dnn():
 		self.reg = reg
 		self.h = h_size
 		self.h_deep = len(h_size)+1
+		print 'You are running a %d layers dnn'%(self.h_deep)
 		self.niter = niter
 
 		self.ndata = np.shape(self.X)[0]
@@ -84,15 +85,15 @@ class dnn():
 			loss = loss_new
 
 			#the other option for b_ini--dscores:
-			bstate[h_deep] = probs-self.Y
-			
+			bstate[h_deep] = (probs-self.Y)/self.ndata
+
 			for k in range(h_deep-1,-1,-1):
+				bstate[k] = np.maximum(0,np.dot(bstate[k+1],self.ham[k].T))
 				dham = np.dot(np.array(fstate[k]).T,bstate[k+1]) 
 				dconst = np.sum(bstate[k+1], axis=0) 
 
-				self.ham[k]  -= dham / self.reg * self.step_size / self.ndata
-				self.const[k] -= dconst / self.reg * self.step_size /self.ndata
-				bstate[k] = np.maximum(0,np.dot(bstate[k+1],self.ham[k].T))
+				self.ham[k]  -= dham / self.reg * self.step_size# / self.ndata
+				self.const[k] -= dconst / self.reg * self.step_size# /self.ndata
 
 		return loss
 
