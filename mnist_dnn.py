@@ -9,7 +9,8 @@ import numpy as np
 import matplotlib.pyplot as plt
 from sklearn.datasets import fetch_mldata
 import heapq
-
+from dnn2 import dnn
+from nntl import nntl 
 #get_ipython().magic(u'matplotlib inline')
 
 
@@ -25,7 +26,7 @@ X, y = mnist.data.astype(float) , mnist.target.astype(int)
 #Show a number
 fig_n = 300
 plt.imshow(X[fig_n,:].reshape(28,28), cmap="Greys_r")
-plt.show()
+#plt.show()
 print y[fig_n]
 
 
@@ -63,7 +64,7 @@ plt.hist(y,bins,alpha=.6,normed = 1,rwidth = .8,label = 'Original ratings')
 plt.xlabel('Label')
 plt.ylabel('Population ratio')
 plt.xticks(np.linspace(0.0,9,num = 10))
-plt.show()
+#plt.show()
 
 
 # In[6]:
@@ -76,7 +77,7 @@ avg = np.mean(X,axis = 0)
 X -=  avg
 
 #PCA
-
+'''
 def pca(imox_mtx, k):
     imox_sctr = np.dot(imox_mtx.T, imox_mtx)
     imox_eigval, imox_eigvec = np.linalg.eig(imox_sctr)
@@ -86,7 +87,7 @@ def pca(imox_mtx, k):
     max_pos = heapq.nlargest(k, xrange(len(imox_eigval)), key=imox_eigval.__getitem__)
     transmtx = imox_eigvec[:,max_pos]  
     return per, transmtx
-
+'''
 
 # In[7]:
 
@@ -105,9 +106,9 @@ plt.show()
 # In[8]:
 
 #PCA transformation
-per, transmtx = pca(X,392)
-X = np.dot(transmtx.T, X.T)
-X = X.T
+#per, transmtx = pca(X,392)
+#X = np.dot(transmtx.T, X.T)
+#X = X.T
 
 
 # In[24]:
@@ -123,18 +124,17 @@ X = X[loc,:]
 y =  y[loc]
 
 #Partition into two sets / 2-fold CV
-parti = X.shape[0]/2
+parti = X.shape[0]/100
 X_train, X_test = X[:parti], X[parti:]
 y_train, y_test = y[:parti], y[parti:]
 #print np.shape(X_train), type(y_train)
-
+#print parti
 
 # In[40]:
 
-from dnn import dnn
 # accu1: use train as train, test as tet
 iter_times = 10000
-dnn1 = dnn(X_train, y_train, h_size = [10], niter = iter_times)
+dnn1 = dnn(X_train, y_train, h_size = [20,10], niter = iter_times)
 import time as ti
 st = ti.time()
 dnn1.model()
@@ -142,7 +142,7 @@ print ti.time()-st
 
 y_tepd = dnn1.predict(X_test[:,:])
 acc1 = dnn1.accuracy(y_test[0:],y_tepd)
-print acc1
+print 'accu = ', acc1
 
 
 # In[21]:
@@ -183,27 +183,6 @@ yh = [93.37,93.33,91.87,85.04]
 plt.plot(xh,yh,'o')
 
 
-# In[ ]:
-
-#Use last 10000 as test
-
-nntl = neural_net_two_layer(X_train0, y_train0, h_size = 20, reg = 0.001)
-import time as ti
-st = ti.time()
-nntl.model()
-print ti.time()-st
-
-y_tepd0 = nntl.predict(X_test0[:,:])
-acc = nntl.accuracy(y_test0[0:],y_tepd0)
-print acc
-
-
-# In[ ]:
-
-
-
-
-# In[ ]:
 
 
 
