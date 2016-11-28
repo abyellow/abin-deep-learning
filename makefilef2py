@@ -1,0 +1,5 @@
+all:
+	f2py -c --f90flags=' -O3 ' -m fdot fdot.f90 --fcompiler=intelem
+	#f2py -c --f90flags=' -fPIC -O3 -funroll-loops -ffast-math -march=native ' -m fdot fdot.f90 --fcompiler=gnu95
+	#f2py -c --f90flags=' -fopenmp -O3 -funroll-loops -ffast-math -march=native ' -lgomp -m Glf90_omp Gless_openmp.f90 --fcompiler=gnu95
+	

@@ -9,8 +9,8 @@ import numpy as np
 import matplotlib.pyplot as plt
 from sklearn.datasets import fetch_mldata
 import heapq
-from dnn2 import dnn
-from nntl import nntl 
+from dnn import dnn
+#from nntl import nntl 
 #get_ipython().magic(u'matplotlib inline')
 
 
@@ -124,7 +124,7 @@ X = X[loc,:]
 y =  y[loc]
 
 #Partition into two sets / 2-fold CV
-parti = X.shape[0]/100
+parti = X.shape[0]/10
 X_train, X_test = X[:parti], X[parti:]
 y_train, y_test = y[:parti], y[parti:]
 #print np.shape(X_train), type(y_train)
@@ -151,11 +151,11 @@ print 'accu = ', acc1
 dnn2 = dnn(X_test, y_test, niter = iter_times, h_size = [20,10])
 import time as ti
 st = ti.time()
-nntl.model()
+dnn2.model()
 print ti.time()-st
 
-y_trpd = nntl.predict(X_train[:,:])
-acc2 = nntl.accuracy(y_train[0:],y_trpd)
+y_trpd = dnn2.predict(X_train[:,:])
+acc2 = dnn2.accuracy(y_train[0:],y_trpd)
 print acc2
 
 
@@ -166,7 +166,7 @@ print 'average accuracy: %.4f' %(100*(acc1+acc2)/2.), '%'
 
 
 # In[ ]:
-
+'''
 xh = [2,5,10,20]
 yh = [70.29,88.55,93.33,95.32]
 plt.plot(xh,yh)
@@ -174,13 +174,10 @@ plt.plot(xh,yh,'o')
 plt.xlabel('Hidden layer size')
 plt.ylabel('Accuracy')
 plt.show()
-
+'''
 
 # In[ ]:
 
-xh = [0.0001,0.001,0.01,0.1]
-yh = [93.37,93.33,91.87,85.04]
-plt.plot(xh,yh,'o')
 
 
 
