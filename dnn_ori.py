@@ -54,8 +54,7 @@ class dnn():
 		fstate[0] = self.X
 
 		bstate = {}
-		bstate[h_deep] = -self.Y / self.ndata 
-
+		#bstate[h_deep] = self.Y
 		loss = 3
 		ti = time()	
 		for i in range(self.niter):
@@ -79,9 +78,13 @@ class dnn():
 				print 'iteration: %d, loss: %f' %(i, loss_new)
 			if (timeflag and i%100==0):
 					print 'time used: ', time()-ti
-
+				#if (loss_new > loss):
+			#		print 'Error: loss_new=%.5f is larger than loss=%.5f'%(loss_new, loss)
 			loss = loss_new
-			#bstate[h_deep] = (probs - self.Y)/self.ndata
+			dscores = (probs - self.Y)/self.ndata
+			#dscores[range(self.ndata),self.Y] -= 1
+			#dscores /= self.ndata         
+			bstate[h_deep] = dscores	
 
 			for k in range(h_deep,0,-1):
 
